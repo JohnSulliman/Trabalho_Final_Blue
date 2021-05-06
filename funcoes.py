@@ -5,6 +5,7 @@ def execute(sql, params=None):
         with conn.cursor() as cursor:
             cursor.execute(sql, params)
             conn.commit()
+            return cursor.lastrwoid
 
 def query(sql, params=None):
     with connect(host="localhost", user="root", password="Mortadela1", database="locadora") as conn:

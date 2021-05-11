@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 #--------------------------------------------Usuários-------------------------------------------------------------
 
 def usuario_from_web(**kwargs):
@@ -27,6 +29,7 @@ def genero_from_web(**kwargs):
 
 def genero_from_db(genero):
     return {
+        "id": genero["id"],
         "nome": genero["nome"],
     }
 
@@ -42,6 +45,7 @@ def diretor_from_web(**kwargs):
 
 def diretor_from_db(diretor):
     return {
+        "id": diretor["id"],
         "nome_completo": diretor["nome_completo"],
     }
 
@@ -60,16 +64,37 @@ def filme_from_web(**kwargs):
         "generos_id": kwargs["generos_id"] if "generos_id" in kwargs else "",
     }
 
-def filme_from_db(*args):
-    return [{
+def filme_from_db(filme):
+    return {
+        "id": filme["id"],
         "titulo": filme["titulo"],
         "ano": filme["ano"],
         "classificacao": filme["classificacao"],
-        "preco": filme(str["preco"]),
+        "preco": str(filme["preco"]),
         "diretores_id": filme["diretores_id"],
         "generos_id": filme["generos_id"],
 
-    } for filme in args]
+    }
 
 def nome_filme_from_web(**kwargs):
     return kwargs["titulo"] if "titulo" in kwargs else ""
+
+#----------------------------------------Locações e Pagamentos----------------------------------------------------
+
+def locacao_from_web(**kwargs):
+    return {
+        "filmes_id": kwargs["filmes_id"] if "filmes_id" in kwargs else "",
+        "usuarios_id": kwargs["usuarios_id"] if "usuarios_id" in kwargs else "",
+    }
+
+def locacao_from_db(locacao):
+    return {
+        "id": locacao["id"],
+        "data_inicio": datetime.now(),
+        "data_fim": timedelta(hours=48, minutes=0, seconds=0),
+        "filmes_id": locacao["filmes_id"],
+        "usuarios_id": locacao["usuarios_id"],
+    }
+
+def id_locacao_from_web(**kwargs):
+    return kwargs["id"] if "id" in kwargs else ""

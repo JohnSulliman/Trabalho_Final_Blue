@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from datetime import datetime, timedelta
+import random
 from serializadores import *
 from validacao import *
 from models import *
@@ -159,42 +160,29 @@ def apagar_filme(id):
 @app.route("/locacoes", methods=["POST"])
 def inserir_locacao():
     locacao = filme_from_web(**request.json) and usuario_from_web(**request.json) and locacao_from_web(**request.json)
+    inicio = datetime.now()
+    prazo = timedelta(hours=48, minutes=0, seconds=0)
+    fim = inicio + prazo
     if valida_locacao(**locacao):
-        datetime.now()
-        inicio = datetime.now()
-        fim = inicio + timedelta(hours=48, minutes=0, seconds=0)
         id_locacao = insert_locacao(inicio, fim, **locacao)
         locacao_cadastrada = get_locacao(id_locacao)
         return jsonify(locacao_from_db(locacao_cadastrada))
     else:
         return jsonify({"Erro": "Locação inválida!"})
 
-# @app.route("/filmes/<int:id>", methods=["PUT", "PATCH"])
-# def alterar_filmes(id):
-#     filme = diretor_from_web(**request.json) and genero_from_web(**request.json) and filme_from_web(**request.json)
-#     if valida_filme(**filme) and valida_diretor(**filme) and valida_genero(**filme):
-#         update_filme(id, **filme)
-#         filme_cadastrado = get_filme(id)
-#         return jsonify(filme_from_db(filme_cadastrado))
-#     else:
-#         return jsonify({"Erro": "Filme inválido!"})
-#
-# @app.route("/filmes", methods=["GET"])
-# def buscar_filmes():
-#     nome_filme = nome_filme_from_web(**request.args)
-#     filmes = select_filmes(nome_filme)
-#     filmes_from_db = [filme_from_db(filme) for filme in filmes]
-#     return jsonify(filmes_from_db)
-#
-# @app.route("/filmes/<int:id>", methods=["DELETE"])
-# def apagar_filme(id):
-#     try:
-#         delete_filme(id)
-#         return jsonify("O filme foi deletado!")#Para arquivos deletados, normalmente retornamos "return ("", 204)"
-#     except:
-#         return jsonify({"Erro": "Filme não pode ser deletado ou não existe!"})
-
-
+@app.route("/pagamentos", methods=["POST"])
+def inserir_pagamento():
+    pagamento = pagamento_from_web(**request.json)
+    status_pagamento = ["aprovado", "em analise", "reprovado"]
+    status_atual = random.choice(status_pagamento)
+    codigo = random.randint(0, 1000)
+    data_pagamento = datetime.now()
+    if valida_pagamento(**pagamento):
+        id_pagamento = insert_pagamento(status_atual, codigo, data_pagamento, **pagamento)
+        pagamento_registrado = get_pagamento(id_pagamento)
+        return jsonify(pagamentos_from_db(pagamento_registrado))
+    else:
+        return jsonify({"erro": "Pagamento inválido"})
 
 
 # Fazer uma locação => enviar id_filme, id_usuario, tipo_pagamento, data_inicio
@@ -216,12 +204,6 @@ def inserir_locacao():
 # agora + timedelta(hours=48)
 # datetime.datetime(2021, 5, 2, 22, 37, 8, 762753)
 
-
-# import random
-#
-# mylist = ["apple", "banana", "cherry"]
-#
-# print(random.choice(mylist))
 
 if __name__ == "__main__":
     app.run()

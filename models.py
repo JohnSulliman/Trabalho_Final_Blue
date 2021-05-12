@@ -1,4 +1,4 @@
-from funcoes import insert, select, select_like, update, delete
+from funcoes import query, insert, select, select_like, update, delete
 
 #--------------------------------------------Usuários-------------------------------------------------------------
 
@@ -57,15 +57,42 @@ def insert_filme(titulo, ano, classificacao, preco, diretores_id, generos_id):
     return insert("filmes", ["titulo", "ano", "classificacao", "preco", "diretores_id", "generos_id"],
                   [titulo, ano, classificacao, preco, diretores_id, generos_id])
 
-def update_filme(id_filme, titulo, ano, classificacao, preco):
-    update("filmes", "id", id_filme, ["titulo", "ano", "classificacao", "preco"],
-           [titulo, ano, classificacao, preco])
+def update_filme(id_filme, titulo, ano, classificacao, preco, diretores_id, generos_id):
+    update("filmes", "id", id_filme, ["titulo", "ano", "classificacao", "preco", "diretores_id", "generos_id"],
+           [titulo, ano, classificacao, preco, diretores_id, generos_id])
 
-def get_filme(id_filme):
-    return select("filmes", "id", id_filme)[0]
+def get_filme(self):
+    return query(f"""SELECT 
+                 *
+                 FROM filmes
+                 INNER JOIN diretores on filmes.diretores_id = diretores.id
+                 INNER JOIN generos on filmes.generos_id = generos.id""")[0]
 
 def select_filmes(id_filme):
     return select_like("filmes", "id", id_filme)
 
 def delete_filme(id_filme):
     delete("filmes", "id", id_filme)
+
+#----------------------------------------Locações e Pagamentos----------------------------------------------------
+
+def insert_locacao(data_inicio, data_fim, filmes_id, usuarios_id):
+    return insert("locacoes", ["data_inicio", "data_fim", "filmes_id", "usuarios_id"],
+                  [data_inicio, data_fim, filmes_id, usuarios_id])
+
+# def update_filme(id_filme, titulo, ano, classificacao, preco, diretores_id, generos_id):
+#     update("filmes", "id", id_filme, ["titulo", "ano", "classificacao", "preco", "diretores_id", "generos_id"],
+#            [titulo, ano, classificacao, preco, diretores_id, generos_id])
+#
+def get_locacao(self):
+    return query(f"""SELECT 
+                 *
+                 FROM locacoes
+                 INNER JOIN filmes on locacoes.filmes_id = filmes.id
+                 INNER JOIN usuarios on locacoes.usuarios_id = usuarios.id""")[0]
+#
+# def select_filmes(id_filme):
+#     return select_like("filmes", "id", id_filme)
+#
+# def delete_filme(id_filme):
+#     delete("filmes", "id", id_filme)

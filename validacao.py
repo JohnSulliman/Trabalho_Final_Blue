@@ -12,7 +12,7 @@ def valida_usuario(nome_completo, CPF):
 
 #---------------------------------------------Gêneros-------------------------------------------------------------
 
-def valida_genero(nome):
+def valida_genero(**nome):
     if len(nome) == 0:
         return False
 
@@ -21,7 +21,7 @@ def valida_genero(nome):
 
 #---------------------------------------------Diretores-----------------------------------------------------------
 
-def valida_diretor(nome_completo):
+def valida_diretor(**nome_completo):
     if len(nome_completo) == 0:
         return False
 
@@ -42,6 +42,16 @@ def valida_filme(titulo, ano, classificacao, preco, diretores_id, generos_id):
     elif diretores_id == 0:
         return False
     elif generos_id == 0:
+        return False
+    else:
+        return True
+
+#----------------------------------------Locações e Pagamentos----------------------------------------------------
+
+def valida_locacao(filmes_id, usuarios_id):
+    if filmes_id == 0:
+        return False
+    elif usuarios_id == 0:
         return False
     else:
         return True

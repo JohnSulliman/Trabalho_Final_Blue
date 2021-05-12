@@ -80,10 +80,10 @@ def insert_locacao(data_inicio, data_fim, filmes_id, usuarios_id):
     return insert("locacoes", ["data_inicio", "data_fim", "filmes_id", "usuarios_id"],
                   [data_inicio, data_fim, filmes_id, usuarios_id])
 
-# def update_filme(id_filme, titulo, ano, classificacao, preco, diretores_id, generos_id):
-#     update("filmes", "id", id_filme, ["titulo", "ano", "classificacao", "preco", "diretores_id", "generos_id"],
-#            [titulo, ano, classificacao, preco, diretores_id, generos_id])
-#
+def update_locacao(id, data_inicio, data_fim, filmes_id, usuarios_id):
+    update("locacao", "id", id, ["data_inicio", "data_fim", "filmes_id", "usuarios_id"],
+           [data_inicio, data_fim, filmes_id, usuarios_id])
+
 def get_locacao(self):
     return query(f"""SELECT 
                  *
@@ -96,3 +96,11 @@ def get_locacao(self):
 #
 # def delete_filme(id_filme):
 #     delete("filmes", "id", id_filme)
+
+def insert_pagamento(status, codigo_pagamento, data, locacoes_id, *valor, **tipo):
+    return insert("pagamentos", ["tipo", "status", "codigo_pagamento", "valor", "data", "locacoes_id"],
+                  [tipo, status, codigo_pagamento, valor, data, locacoes_id])
+
+
+def get_pagamento(id):
+    return select("pagamentos", "id", id)

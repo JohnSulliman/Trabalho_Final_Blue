@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-
 #--------------------------------------------Usuários-------------------------------------------------------------
 
 def usuario_from_web(**kwargs):
@@ -90,11 +88,30 @@ def locacao_from_web(**kwargs):
 def locacao_from_db(locacao):
     return {
         "id": locacao["id"],
-        "data_inicio": datetime.now(),
-        "data_fim": timedelta(hours=48, minutes=0, seconds=0),
+        "data_inicio": (locacao["data_inicio"]).strftime('%d-%m-%Y %H:%M:%S'),
+        "data_fim": (locacao["data_fim"]).strftime('%d-%m-%Y %H:%M:%S'),
         "filmes_id": locacao["filmes_id"],
         "usuarios_id": locacao["usuarios_id"],
     }
 
 def id_locacao_from_web(**kwargs):
     return kwargs["id"] if "id" in kwargs else ""
+
+def pagamento_from_web(**kwargs):
+    return {
+        "tipo": kwargs["tipo"] if "tipo" in kwargs else "",
+        "valor": kwargs["valor"] if "valor" in kwargs else "", # DÚVIDA PARA SER TIRADA SEGUNDA
+        "locacoes_id": kwargs["locacoes_id"] if "locacoes_id" in kwargs else ""
+    }
+
+
+def pagamentos_from_db(pagamento):
+    return {
+        "id": pagamento["id"],
+        "tipo": pagamento["tipo"],
+        "status": pagamento["status"],
+        "codigo_pagamento": pagamento["codigo_pagamento"],
+        "valor": pagamento["valor"],
+        "data": (pagamento["data"]).strftime('%d-%m-%Y %H:%M:%S'),
+        "locacoes_id": pagamento["locacoes_id"]
+    }
